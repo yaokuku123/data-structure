@@ -1,5 +1,7 @@
 package com.yqj.dataStructure.linkedList;
 
+import java.util.Stack;
+
 /**
  * Copyright(C),2019-2020,XXX公司
  * FileName: SingleLinkedList
@@ -30,13 +32,101 @@ public class SingleLinkedList {
         linkedList.deleteNode(1);
         //展示链表的元素
         linkedList.showNode();
+        //获取链表元素个数
+        System.out.println(getSize(linkedList.getHead()));
+        //获取倒数第二个元素
+        //System.out.println(getLastIndexNode(linkedList.getHead(),2));
+        //反转链表
+        //reverseList(linkedList.getHead());
+        //linkedList.showNode();
+        //逆序打印链表
+        reversePrint(linkedList.getHead());
+    }
+
+    /**
+     * 获取链表元素个数
+     *
+     * @param head 头节点
+     * @return
+     */
+    public static int getSize(Message head) {
+        Message temp = head.next;
+        int size = 0;
+        while (temp != null) {
+            size++;
+            temp = temp.next;
+        }
+        return size;
+    }
+
+    /**
+     * 获取倒数第index个元素
+     *
+     * @param head  头节点
+     * @param index 倒数第index个元素
+     * @return 元素
+     */
+    public static Message getLastIndexNode(Message head, int index) {
+        int size = getSize(head);
+        if (index < 0 || index > size) {
+            return null;
+        }
+        Message temp = head.next;
+        for (int i = 0; i < size - index; i++) {
+            temp = temp.next;
+        }
+        return temp;
+    }
+
+    /**
+     * 反转链表
+     *
+     * @param head
+     */
+    public static void reverseList(Message head) {
+        //没有或者只有一个值直接返回
+        if (head.next == null || head.next.next == null) {
+            return;
+        }
+        Message cur = head.next;
+        Message next = null; //保存下一个节点的引用
+        Message reverseList = new Message(0, "");
+        while (cur != null) {
+            next = cur.next;
+            cur.next = reverseList.next;
+            reverseList.next = cur;
+            cur = next;
+        }
+        head.next = reverseList.next;
+    }
+
+    /**
+     * 逆序打印链表元素
+     * @param head 头节点
+     */
+    public static void reversePrint(Message head) {
+        Stack<Message> stack = new Stack<>();
+        Message temp = head.next;
+        while (temp != null) {
+            stack.push(temp);
+            temp = temp.next;
+        }
+        while (!stack.empty()){
+            System.out.println(stack.pop());
+        }
     }
 }
 
 //维护单向链表
+//若仅与当前节点的数据有关则另temp指向head.next的第一个有效元素即可，若需要使用到元素的next，则需要temp指向head
+//换句话说，若开始temp指向head.next，则遍历最后temp指向null；若开始temp指向head，则遍历最后temp指向最后一个元素
 class LinkedList {
     //头节点
     private Message head = new Message(0, "");
+
+    public Message getHead() {
+        return head;
+    }
 
     /**
      * 向链表中添加元素
@@ -100,6 +190,7 @@ class LinkedList {
 
     /**
      * 删除某编号的元素
+     *
      * @param index
      */
     public void deleteNode(int index) {
@@ -112,9 +203,9 @@ class LinkedList {
             }
             temp = temp.next;
         }
-        if (flag){
+        if (flag) {
             temp.next = temp.next.next;
-        }else {
+        } else {
             System.out.println("不存在该元素，删除失败");
         }
     }
