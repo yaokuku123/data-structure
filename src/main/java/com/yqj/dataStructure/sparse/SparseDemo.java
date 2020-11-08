@@ -7,7 +7,7 @@ package com.yqj.dataStructure.sparse;
  * Date: 2020/11/2 8:42
  * 实现：将普通二维数组转化为稀疏矩阵的存储方式；将稀疏矩阵恢复为原始的二维数组
  */
-public class SparseTest {
+public class SparseDemo {
     private int sum;
 
     public static void main(String[] args) {

@@ -9,7 +9,7 @@ import java.util.Stack;
  * Date: 2020/11/4 11:07
  * 功能：实现单向链表的相关操作
  */
-public class SingleLinkedList {
+public class SingleLinkedListDemo {
     public static void main(String[] args) {
         //构造测试元素
         Message msg1 = new Message(1, "Yorick");

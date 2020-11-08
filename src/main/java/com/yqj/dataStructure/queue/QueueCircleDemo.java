@@ -9,7 +9,7 @@ import java.util.Scanner;
  * Date: 2020/11/4 10:48
  * 功能：循环队列实现，解决队列假满的现象，其中空出一个位置不保存元素
  */
-public class QueueCircle {
+public class QueueCircleDemo {
     public static void main(String[] args) {
         CircleQueue queue = new CircleQueue(4);
         boolean loop = true;

@@ -9,7 +9,7 @@ import java.util.Scanner;
  * Date: 2020/11/2 8:43
  * 实现：普通的队列，实现向队列中添加元素，获取队列中的元素等功能
  */
-public class QueueCommon {
+public class QueueCommonDemo {
     public static void main(String[] args) {
         Queue queue = new Queue(3);
         boolean loop = true;
