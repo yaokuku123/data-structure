@@ -64,7 +64,7 @@ public class QuickSort {
         int temp = arr[low];
         int t = 0;
         while (i < j) {
-            //先动j，后动i
+            //先动j，后动i，若i先变化则势必会跳过第一个基准数，导致j后变化时判断出错
             while (temp<=arr[j] && i<j) {
                 j--;
             }
