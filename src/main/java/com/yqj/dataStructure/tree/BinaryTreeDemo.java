@@ -37,15 +37,28 @@ class BinaryTree {
     }
 
     public void preOrder() {
-        this.root.preOrder();
+        if (root != null) {
+            this.root.preOrder();
+        } else {
+            System.out.println("二叉树为空");
+        }
+
     }
 
     public void infixOrder() {
-        this.root.infixOrder();
+        if (root != null) {
+            this.root.infixOrder();
+        } else {
+            System.out.println("二叉树为空");
+        }
     }
 
     public void postOrder() {
-        this.root.postOrder();
+        if (root != null) {
+            this.root.postOrder();
+        } else {
+            System.out.println("二叉树为空");
+        }
     }
 }
 
