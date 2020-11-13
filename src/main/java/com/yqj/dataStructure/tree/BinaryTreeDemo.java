@@ -20,7 +20,29 @@ public class BinaryTreeDemo {
         root.setLeft(node2);
         root.setRight(node3);
         node3.setRight(node4);
-        //遍历
+
+        //前中后遍历
+//        order(binaryTree);
+
+        //前中后查找
+        search(binaryTree, 1);
+    }
+
+    //前中后查找
+    public static void search(BinaryTree binaryTree, int no) {
+        //前
+        Node node = binaryTree.preOrderSearch(no);
+        System.out.println("前：" + node);
+        //中
+        node = binaryTree.preOrderSearch(no);
+        System.out.println("中：" + node);
+        //后
+        node = binaryTree.preOrderSearch(no);
+        System.out.println("后：" + node);
+    }
+
+    //前中后遍历
+    public static void order(BinaryTree binaryTree) {
         binaryTree.preOrder();
         System.out.println("******");
         binaryTree.infixOrder();
@@ -38,7 +60,7 @@ class BinaryTree {
 
     public void preOrder() {
         if (root != null) {
-            this.root.preOrder();
+            root.preOrder();
         } else {
             System.out.println("二叉树为空");
         }
@@ -47,7 +69,7 @@ class BinaryTree {
 
     public void infixOrder() {
         if (root != null) {
-            this.root.infixOrder();
+            root.infixOrder();
         } else {
             System.out.println("二叉树为空");
         }
@@ -55,9 +77,33 @@ class BinaryTree {
 
     public void postOrder() {
         if (root != null) {
-            this.root.postOrder();
+            root.postOrder();
         } else {
             System.out.println("二叉树为空");
+        }
+    }
+
+    public Node preOrderSearch(int no) {
+        if (root != null) {
+            return root.preOrderSearch(no);
+        } else {
+            return null;
+        }
+    }
+
+    public Node infixOrderSearch(int no) {
+        if (root != null) {
+            return root.infixOrderSearch(no);
+        } else {
+            return null;
+        }
+    }
+
+    public Node postOrderSearch(int no) {
+        if (root != null) {
+            return root.postOrderSearch(no);
+        } else {
+            return null;
         }
     }
 }
@@ -144,6 +190,63 @@ class Node {
             this.right.postOrder();
         }
         System.out.println(this);
+    }
+
+    //前序查找
+    public Node preOrderSearch(int no) {
+        if (this.no == no) {
+            return this;
+        }
+        Node temp = null;
+        if (this.left != null) {
+            temp = this.left.preOrderSearch(no);
+        }
+        if (temp != null) {
+            return temp;
+        }
+        if (this.right != null) {
+            temp = this.right.preOrderSearch(no);
+        }
+        return temp;
+    }
+
+    //中序查找
+    public Node infixOrderSearch(int no) {
+        Node temp = null;
+        if (this.left != null) {
+            temp = this.left.infixOrderSearch(no);
+        }
+        if (temp != null) {
+            return temp;
+        }
+        if (this.no == no) {
+            return this;
+        }
+        if (this.right != null) {
+            temp = this.right.infixOrderSearch(no);
+        }
+        return temp;
+    }
+
+    //后序查找
+    public Node postOrderSearch(int no) {
+        Node temp = null;
+        if (this.left != null) {
+            temp = this.left.postOrderSearch(no);
+        }
+        if (temp != null) {
+            return temp;
+        }
+        if (this.right != null) {
+            temp = this.right.postOrderSearch(no);
+        }
+        if (temp != null) {
+            return temp;
+        }
+        if (this.no == no) {
+            return this;
+        }
+        return temp;
     }
 }
 
