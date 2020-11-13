@@ -25,7 +25,13 @@ public class BinaryTreeDemo {
 //        order(binaryTree);
 
         //前中后查找
-        search(binaryTree, 1);
+//        search(binaryTree, 1);
+
+        //删除节点
+        order(binaryTree);
+        deleteNode(binaryTree,4);
+        System.out.println("******");
+        order(binaryTree);
     }
 
     //前中后查找
@@ -48,6 +54,11 @@ public class BinaryTreeDemo {
         binaryTree.infixOrder();
         System.out.println("******");
         binaryTree.postOrder();
+    }
+
+    //删除节点
+    public static void deleteNode(BinaryTree binaryTree, int no) {
+        binaryTree.delete(no);
     }
 }
 
@@ -104,6 +115,18 @@ class BinaryTree {
             return root.postOrderSearch(no);
         } else {
             return null;
+        }
+    }
+
+    public void delete(int no) {
+        if (root != null) {
+            if (root.getNo() == no) {
+                root = null;
+            } else {
+                root.delete(no);
+            }
+        } else {
+            System.out.println("二叉树为空");
         }
     }
 }
@@ -247,6 +270,24 @@ class Node {
             return this;
         }
         return temp;
+    }
+
+    //删除节点
+    public void delete(int no) {
+        if (this.left != null && this.left.no == no) {
+            this.left = null;
+            return;
+        }
+        if (this.right != null && this.right.no == no) {
+            this.right = null;
+            return;
+        }
+        if (this.left != null) {
+            this.left.delete(no);
+        }
+        if (this.right != null) {
+            this.right.delete(no);
+        }
     }
 }
 
