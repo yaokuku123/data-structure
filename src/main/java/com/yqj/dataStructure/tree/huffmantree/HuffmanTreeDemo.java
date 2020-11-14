@@ -1,4 +1,4 @@
-package com.yqj.dataStructure.tree.huffman;
+package com.yqj.dataStructure.tree.huffmantree;
 
 import java.util.ArrayList;
 import java.util.Collections;
