@@ -7,7 +7,7 @@ import java.util.*;
  * FileName: HuffmanCode
  * Author: yaoqijun
  * Date: 2020/11/14 16:19
- * 功能：哈夫曼编码
+ * 功能：哈夫曼编码 test
  */
 public class HuffmanCodeDemo {
     public static void main(String[] args) {
