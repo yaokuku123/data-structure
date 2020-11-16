@@ -1,5 +1,6 @@
 package com.yqj.dataStructure.tree.huffmancode;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -11,11 +12,162 @@ import java.util.*;
  */
 public class HuffmanCodeDemo {
     public static void main(String[] args) {
-        String content = "i like like like java do you like a java";
-        byte[] contentBytes = content.getBytes();
-        byte[] huffmanCodeBytes = huffmanZip(contentBytes);
-        System.out.println(Arrays.toString(huffmanCodeBytes) +
-                " 压缩率：" + (contentBytes.length - huffmanCodeBytes.length) * 1.0 / contentBytes.length * 100 + "%");
+//        //字符串的压缩与解压
+//        String content = "i like like like java do you like a java";
+//        byte[] contentBytes = content.getBytes();
+//        //压缩
+//        byte[] huffmanCodeBytes = huffmanZip(contentBytes);
+//        System.out.println(Arrays.toString(huffmanCodeBytes));
+//        //解压
+//        byte[] unZipContentBytes = huffmanUnZip(huffmanCodes,huffmanCodeBytes);
+//        System.out.println(new String(unZipContentBytes));
+
+        //文件的压缩与解压
+        String srcPath = "D:\\image\\1.jpg";
+        String zipPath = "D:\\image\\1.zip";
+        String unzipPath = "D:\\image\\1unzip.jpg";
+        //压缩
+        zipFile(srcPath, zipPath);
+        System.out.println("压缩成功");
+        //解压
+        unzipFile(zipPath, unzipPath);
+        System.out.println("解压成功");
+    }
+
+    /**
+     * 解压文件
+     *
+     * @param zipPath   压缩文件路径
+     * @param unzipPath 解压文件路径
+     */
+    private static void unzipFile(String zipPath, String unzipPath) {
+        InputStream in = null;
+        OutputStream os = null;
+        ObjectInputStream ois = null;
+        try {
+            in = new FileInputStream(zipPath);
+            ois = new ObjectInputStream(in);
+            //通过对象输入流获取数据
+            byte[] bytes = (byte[]) ois.readObject();
+            Map<Byte, String> huffmanCodes = (Map<Byte, String>) ois.readObject();
+            byte[] sourceBytes = huffmanUnZip(huffmanCodes, bytes);
+            os = new FileOutputStream(unzipPath);
+            os.write(sourceBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                os.close();
+                ois.close();
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 压缩文件
+     *
+     * @param srcPath 源文件路径
+     * @param zipPath 压缩后文件路径
+     */
+    private static void zipFile(String srcPath, String zipPath) {
+        InputStream in = null;
+        OutputStream os = null;
+        ObjectOutputStream oos = null;
+        try {
+            in = new FileInputStream(srcPath);
+            byte[] bytes = new byte[in.available()];
+            in.read(bytes);
+            byte[] huffmanCodesBytes = huffmanZip(bytes);
+            os = new FileOutputStream(zipPath);
+            oos = new ObjectOutputStream(os);
+            //通过对象输出流输出数据
+            oos.writeObject(huffmanCodesBytes);
+            oos.writeObject(huffmanCodes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                oos.close();
+                os.close();
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 哈夫曼编码的解压
+     *
+     * @param bytes 经过编码后的byte数组
+     * @return 原始byte数组
+     */
+    private static byte[] huffmanUnZip(Map<Byte, String> huffmanCodes, byte[] bytes) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            //i在最后一个字节位置，且该字节为不小于0的数，说明不够8位，此时不需要补齐8位
+            boolean flag = (i == (bytes.length - 1) && (int) bytes[i] >= 0);
+            String s = byteToString(!flag, bytes[i]);
+            stringBuilder.append(s);
+        }
+
+        //倒转哈夫曼编码的键值对
+        Map<String, Byte> map = new HashMap<>();
+        for (Map.Entry<Byte, String> entry : huffmanCodes.entrySet()) {
+            map.put(entry.getValue(), entry.getKey());
+        }
+
+        //获取stringBuilder中的各个二进制字符串与哈夫曼编码表比对，存在则将对应的字节保存至list集合
+        List<Byte> list = new ArrayList<>();
+        for (int i = 0; i < stringBuilder.length(); ) {
+            int count = 0;
+            boolean flag = true;
+            Byte b = null;
+            while (flag) {
+                String str = stringBuilder.substring(i, i + count);
+                b = map.get(str);
+                if (b != null) {
+                    flag = false;
+                } else {
+                    count++;
+                }
+            }
+            list.add(b);
+            i += count;
+        }
+
+        //list集合转为byte数组
+        byte[] sourceBytes = new byte[list.size()];
+        for (int i = 0; i < sourceBytes.length; i++) {
+            sourceBytes[i] = list.get(i);
+        }
+        return sourceBytes;
+    }
+
+    /**
+     * 将字节转换为字符串
+     *
+     * @param b
+     * @param flag 标记是否需要补高位
+     * @return
+     */
+    private static String byteToString(boolean flag, byte b) {
+        //将byte转为int
+        int intB = b;
+        //若需要填充8位则通过该方式填充
+        if (flag) {
+            intB |= 256;
+        }
+        //将int类型转为二进制字符串类型
+        String str = Integer.toBinaryString(intB);
+        if (flag) {
+            return str.substring(str.length() - 8); //返回后8位
+        } else {
+            return str; //直接返回
+        }
     }
 
     /**
